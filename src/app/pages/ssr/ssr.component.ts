@@ -1,11 +1,15 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CardComponent } from '../../components/card/card.component';
 import { Meta, Title } from '@angular/platform-browser';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
+import { Product } from '../../models/product.interface';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-ssr',
   standalone: true,
-  imports: [CardComponent],
+  imports: [CardComponent, HttpClientModule, CommonModule],
   templateUrl: './ssr.component.html',
   styleUrl: './ssr.component.scss',
   host: {
@@ -15,27 +19,85 @@ import { Meta, Title } from '@angular/platform-browser';
 export class SsrComponent implements OnInit {
   private title = inject(Title);
   private meta = inject(Meta);
+  private http = inject(HttpClient);
 
-  
+  public product: Product = {
+    id: 0,
+    name: '',
+    availability: '',
+    badges: '',
+    brand: {
+      id: 0,
+      name: '',
+      slug: '',
+      imagen: ''
+    },
+    compareAtPrice: 0,
+    images: [],
+    price: 0,
+    priceunit: 0,
+    taxes: 0,
+    discount: 0,
+    discountPerc: 0,
+    descUM: '',
+    um: '',
+    rating: 0,
+    reviews: 0,
+    sku: '',
+    slug: '',
+    idMarca: 0,
+    marca: '',
+    tieneDescuento: '',
+    color: '',
+    colorhx: '',
+    valorIndividual: '',
+    inventario: 0,
+    inventarioPedido: 0,
+    caracteristicas: '',
+    observaciones: ''
+  };
+
+
   ngOnInit(): void {
-    const title = "Smartphone Mora X10"
-    this.title.setTitle(`${title} | Carro Compras`);
-    this.meta.addTags([
-      { name: 'description', content: 'Compra el mejor  al mejor precio. Envío rápido y seguro.' },
-      { name: 'keywords', content: 'Smartphone Mora X10, smartphone, tecnología, comprar, precio, calidad, dispositivos electrónicos' },
-      { name: 'og:title', content: 'Smartphone Mora X10 - Compra en Mora' },
-      { name: 'og:description', content: 'Obtén el Smartphone Mora X10 al mejor precio en Mora. Aprovecha nuestras ofertas y descuentos exclusivos.' },
-      { name: 'og:type', content: 'product' },
-      { name: 'og:url', content: 'https://mora.com/producto/smartphone-mora-x10' },
-      { name: 'og:image', content: 'https://ssr-demo-w--magico-mundo.us-central1.hosted.app/assets/smartphone-mora-x10.png' },
-      { name: 'twitter:card', content:'summary_large_image' },
-      { name: 'twitter:site', content: '@mora_com' },
-      { name: 'twitter:title', content: 'Smartphone Mora X10 - Compra en Mora' },
-      { name: 'twitter:description', content: 'Compra el Smartphone Mora X10 al mejor precio con envío gratis y garantía.' },
-      { name: 'twitter:image', content: 'https://ssr-demo-w--magico-mundo.us-central1.hosted.app/assets/smartphone-mora-x10.png' },
-      { name: 'robots', content: 'index, follow' },
-      { name: 'googlebot', content: 'index, follow' }
-    ]);
+    this.getProduct().pipe(
+      tap((response) => {
+        const { articulo } = response;
+        this.product = articulo;
     
+        const title = this.product.name;
+        const description = this.product.caracteristicas || this.product.observaciones;
+        const price = this.product.price;
+        const sku = this.product.sku;
+        const brand = this.product.marca;
+        const imageUrl = this.product.images[0];
+        const availability = this.product.availability;
+        
+        // Actualizar el título de la página
+        this.title.setTitle(`${title} | Carro Compras`);
+    
+        // Agregar meta tags dinámicamente
+        this.meta.addTags([
+          { name: 'title', content: `${title} | Carro Compras` },
+          { name: 'description', content: description },
+          { name: 'keywords', content: `chocolatina, ${brand.toLowerCase()}, italo, ${this.product.color}, ${title}, comprar, oferta` },
+          { property: 'og:type', content: 'product' },
+          { property: 'og:title', content: `${title} | Carro Compras` },
+          { property: 'og:description', content: description },
+          { property: 'og:image', content: imageUrl },
+          { property: 'og:url', content: window.location.href },
+          { property: 'og:price:amount', content: `${price}` },
+          { property: 'og:price:currency', content: 'COP' },
+          { property: 'product:brand', content: brand },
+          { property: 'product:availability', content: availability },
+          { property: 'product:retailer_item_id', content: sku },
+        ]);
+      })
+    ).subscribe();
+    
+
+  }
+
+  getProduct(): Observable<any> {
+    return this.http.get<any>("https://clouderp.abakoerp.com:9480/ApiCarroCompras/api/Articulos/RecuperarArticuloDetalleCarroCompras/0/5883");
   }
 }

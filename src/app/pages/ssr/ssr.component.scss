@@ -1,0 +1,48 @@
+.product-detail-container {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 20px;
+  }
+  
+  .product-image {
+    flex: 1;
+    max-width: 300px;
+    margin-right: 20px;
+  }
+  
+  .product-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+  }
+  
+  .product-info {
+    flex: 2;
+  }
+  
+  .product-price {
+    margin: 20px 0;
+    font-size: 1.2em;
+  }
+  
+  .compare-price {
+    color: red;
+    font-size: 0.9em;
+  }
+  
+  .product-actions {
+    margin-top: 20px;
+  }
+  
+  .product-actions .btn {
+    margin-right: 10px;
+  }
+  
+  .product-availability .badge {
+    font-size: 1em;
+  }
+  
+  .product-badges .badge {
+    font-size: 1em;
+  }
+  

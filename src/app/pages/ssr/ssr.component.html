@@ -1,3 +1,61 @@
 <h1 class="heading">Pagina de Producto</h1>
 
-<app-card />
+<div class="product-detail-container">
+    <!-- Producto: Imagen -->
+    <div class="product-image">
+      <img [src]="product.images[0]" alt="{{ product.name }}" />
+    </div>
+  
+    <!-- Producto: Información General -->
+    <div class="product-info">
+      <h1>{{ product.name }}</h1>
+      <p *ngIf="product.brand.name">Marca: {{ product.brand.name }}</p>
+      <p *ngIf="product.availability === 'Disponible'" class="product-availability">
+        <span class="badge bg-success">{{ product.availability }}</span>
+      </p>
+      <p *ngIf="product.badges === 'Oferta'" class="product-badges">
+        <span class="badge bg-warning">{{ product.badges }}</span>
+      </p>
+      <p class="product-rating">
+        Calificación: <strong>{{ product.rating }}</strong> / 5
+      </p>
+      <p class="product-reviews">
+        {{ product.reviews }} Reseñas
+      </p>
+  
+      <!-- Producto: Precio -->
+      <div class="product-price">
+        <p>Precio: {{ product.price | currency:'COP' }}</p>
+        <p *ngIf="product.taxes">Impuestos: {{ product.taxes | currency:'COP' }}</p>
+        <p *ngIf="product.compareAtPrice > 0" class="compare-price">
+          Precio Anterior: <del>{{ product.compareAtPrice | currency:'COP' }}</del>
+        </p>
+      </div>
+  
+      <!-- Producto: Descripción -->
+      <div class="product-description">
+        <h3>Descripción</h3>
+        <p>{{ product.caracteristicas }}</p>
+        <p>{{ product.observaciones }}</p>
+      </div>
+  
+      <!-- Producto: Inventario -->
+      <div class="product-inventory">
+        <p>Inventario Disponible: {{ product.inventario }}</p>
+        <p *ngIf="product.inventarioPedido > 0">
+          Inventario en Pedido: {{ product.inventarioPedido }}
+        </p>
+      </div>
+  
+      <!-- Botones de Acción -->
+      <div class="product-actions">
+        <button class="btn btn-primary" [disabled]="product.inventario === 0">
+          Agregar al Carrito
+        </button>
+        <button class="btn btn-secondary" *ngIf="product.badges === 'Oferta'">
+          Comprar Ahora
+        </button>
+      </div>
+    </div>
+  </div>
+  
