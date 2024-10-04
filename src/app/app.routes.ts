@@ -14,7 +14,7 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/ssg/ssg.component').then(c => c.SsgComponent)
   },
   {
-    path: 'ssr',
+    path: 'ssr/:id',
     loadComponent: () => import('./pages/ssr/ssr.component').then(c => c.SsrComponent)
   },
   {

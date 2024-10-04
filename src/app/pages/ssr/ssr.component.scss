@@ -2,7 +2,29 @@
     display: flex;
     flex-wrap: wrap;
     margin: 20px;
+    
+    // Estilo por defecto para pantallas más grandes
+    & > * {
+      flex: 1 1 calc(33.333% - 20px); // Tres columnas en pantallas grandes
+      margin: 10px;
+    }
+  
+    // Media query para dispositivos tablet
+    @media (max-width: 768px) {
+      & > * {
+        flex: 1 1 calc(50% - 20px); // Dos columnas en tabletas
+      }
+    }
+  
+    // Media query para dispositivos móviles
+    @media (max-width: 480px) {
+      & > * {
+        flex: 1 1 100%; // Una columna en móviles
+        margin: 10px 0; // Margen vertical para mejor separación
+      }
+    }
   }
+  
   
   .product-image {
     flex: 1;
